@@ -8,9 +8,9 @@ function Categories({ onSelectCategory }) {
             <h1>Ecommerce</h1>
             <div className="collapse navbar-collapse custom-navbar" id="navbarNav">
                 <ul className="navbar-nav ">
-                    {allCategories.map((el, index) => (
+                    {allCategories.map((category, index) => (
                         <li className="nav-item" key={index}>
-                            <button className="custom-button" onClick={() => onSelectCategory(el)}>{el}</button>
+                            <button className="custom-button" onClick={() => onSelectCategory(category)}>{category}</button>
                         </li>
                     ))}
                 </ul>

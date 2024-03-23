@@ -5,4 +5,6 @@ const allCategories =  [
   "FAKE: women's clothing",
 ];
 
-export default allCategories;
+const categories = allCategories.map(category => category.replace("FAKE: ", ""));
+
+export default categories;
