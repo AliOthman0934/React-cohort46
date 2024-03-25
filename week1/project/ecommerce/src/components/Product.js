@@ -1,4 +1,4 @@
-import ProductsCard from "./ProductsCard"
+import ProductsCard from "./ProductCardDetails"
 
 
 function Products(props) {

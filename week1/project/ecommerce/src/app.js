@@ -26,7 +26,7 @@ function App() {
                             name={product.title}
                             category={product.category}
                             imgUrl={product.image}
-                            price={"$" + product.price}
+                            price={product.price}
                         />
                     ))}
                 </ul>
