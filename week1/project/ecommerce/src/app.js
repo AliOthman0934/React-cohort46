@@ -9,7 +9,9 @@ import Products from './components/Product';
 function App() {
     const [selectedCategory, setSelectedCategory] = useState(null);
     const handleCategorySelect = (category) => {
-        setSelectedCategory(category);
+        setSelectedCategory((prevCategory) => 
+            prevCategory === category ? null : category
+        );
     };
     const filteredProducts = selectedCategory ?
         allProducts.filter(product => product.category === selectedCategory) :
@@ -27,6 +29,7 @@ function App() {
                             category={product.category}
                             imgUrl={product.image}
                             price={product.price}
+                            isAvailable={product.isAvailable}
                         />
                     ))}
                 </ul>
