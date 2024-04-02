@@ -1,42 +1,66 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import "./app.css";
 import Categories from './components/Categories';
 import Products from './components/Product';
+import ProductDetail from './components/ProductDetail';
 import { RingLoader } from 'react-spinners';
 import Alert from './components/Alert';
 
 function App() {
-    const [allProducts, setAllProducts] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [alert,setAlert] = useState(null);
+    const [alert, setAlert] = useState(null);
 
     const handleCategorySelect = (category) => {
         setSelectedCategory(category);
     };
 
     useEffect(() => {
-        const fetchProducts = async () => {
+        const fetchCategories = async () => {
             try {
-                const response = await fetch('https://fakestoreapi.com/products');
-                if(!response.ok){
-                    throw new Error("Response its not Ok")
+                const response = await fetch('https://fakestoreapi.com/products/categories');
+                if (!response.ok) {
+                    throw new Error("Response is not Ok");
                 }
                 const data = await response.json();
-                setAllProducts(data);
-                setLoading(false)
+                setCategories(data);
             } catch (error) {
-                console.error("Error fetching data", error);
-                setAlert('An error occurred while fetching data. Please try again later.');
+                console.error("Error fetching categories", error);
+                setAlert('An error occurred while fetching categories. Please try again later.');
+            }
+        };
+
+        fetchCategories();
+    }, []);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            setLoading(true);
+            let apiUrl = 'https://fakestoreapi.com/products';
+            if (selectedCategory) {
+                apiUrl = `https://fakestoreapi.com/products/category/${selectedCategory}`;
+            }
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) {
+                    throw new Error("Response is not Ok");
+                }
+                const data = await response.json();
+                setProducts(data);
+                setLoading(false);
+            } catch (error) {
+                console.error("Error fetching products", error);
+                setLoading(false);
+                setAlert('An error occurred while fetching products. Please try again later.');
             }
         };
 
         fetchProducts();
-    }, []);
+    }, [selectedCategory]);
 
-    const filteredProducts = selectedCategory ?
-        allProducts.filter(product => product.category === selectedCategory) :
-        allProducts;
+    const [products, setProducts] = useState([]);
 
     if (loading) {
         return (
@@ -47,28 +71,38 @@ function App() {
     }
 
     return (
-        <div className="col">
-            <Categories onSelectCategory={handleCategorySelect} />
-            <div className="col-lg-10 mx-auto">
-                <ul className="list-group shadow custom-ul">
-                    {filteredProducts.map((product) => (
-                        <Products
-                            key={product.id}
-                            id={product.id}
-                            name={product.title}
-                            category={product.category}
-                            imgUrl={product.image}
-                            price={product.price}
-                        />
-                    ))}
-                </ul>
+        <Router>
+            <div className="col">
+                <Categories categories={categories} onSelectCategory={handleCategorySelect} />
+                <div className="col-lg-10 mx-auto">
+                    <Routes>
+                        <Route exact path="/" element={
+                            <ul className="list-group shadow custom-ul">
+                                {products.map((product) => (
+                                    <Products
+                                        key={product.id}
+                                        id={product.id}
+                                        name={product.title}
+                                        category={product.category}
+                                        imgUrl={product.image}
+                                        price={product.price}
+                                    />
+                                ))}
+                            </ul>} />
+                        <Route path="/product/:id" element={<ProductDetail />} />
+                    </Routes>
+                </div>
+                {alert && <Alert message={alert}></Alert>}
             </div>
-            {alert && <Alert message={alert}></Alert>}
-        </div>
+        </Router>
     );
 }
 
 export default App;
+
+
+
+
 
 
 
