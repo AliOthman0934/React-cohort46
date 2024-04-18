@@ -1,6 +1,4 @@
-// App.js
 import React, { useState } from 'react';
-import "./app.css";
 import allProducts from './fake-data/all-products';
 import Categories from './components/Categories';
 import Products from './components/Product';

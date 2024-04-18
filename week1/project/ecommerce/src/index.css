@@ -6,10 +6,10 @@ body {
     padding-top: 20px;
 }
 
-textarea {
+/* textarea {
     color: #aaa;
 
-}
+} */
 
 .ml-custom {
     margin-left: 100px;
@@ -49,4 +49,8 @@ padding: auto;
     background-color: #96c93d;
     border-style: none;
     text-decoration: none;
+}
+
+.custom-button:focus{
+    background-color: #aaa;
 }
