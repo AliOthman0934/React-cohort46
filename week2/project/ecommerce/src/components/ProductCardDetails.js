@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import Button from "./Button";
 
+
 function ProductsCard(props) {
     let badgClass = "badge";
     badgClass += props.isAvailable ? " bg-success" : "  bg-danger";
@@ -18,7 +19,7 @@ function ProductsCard(props) {
     let decrementProductCount = function(){
         setProductCount(prev => prev - 1)
     };
-
+    console.log(props.id)
 
     return (
         <div className="d-flex align-items-center justify-content-between mt-1">
