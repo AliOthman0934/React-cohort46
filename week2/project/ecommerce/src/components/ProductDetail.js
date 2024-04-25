@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { RingLoader } from 'react-spinners';
+import Categories from './Categories';
 
-function ProductDetail() {
+
+function ProductDetail(props) {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -29,6 +31,7 @@ function ProductDetail() {
 
     return (
         <div>
+            <Categories></Categories>
             {loading && (
                 <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
                     <RingLoader color="#7986cb" loading={loading} size={150} />
@@ -48,3 +51,6 @@ function ProductDetail() {
 }
 
 export default ProductDetail;
+
+
+

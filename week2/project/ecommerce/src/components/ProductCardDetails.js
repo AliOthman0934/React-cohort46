@@ -27,7 +27,7 @@ function ProductsCard(props) {
             <Button envntHandler={decrementProductCount} disabled={productCount === 0}>-</Button>
             <span>{displayFormattedProductsCount()}</span>
             <Button envntHandler={incrementProductCount}>+</Button>
-            <span className={badgClass}>{props.isAvilable ? "Avilable" : "Unavilable"}</span>
+            <span className={badgClass}>{props.isAvailable ? "Available" : "Unavilable"}</span>
         </div>
     )
 }

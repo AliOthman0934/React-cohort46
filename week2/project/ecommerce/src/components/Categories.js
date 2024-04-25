@@ -4,7 +4,7 @@ import allCategories from "../fake-data/all-categories";
 
 function Categories({ onSelectCategory }) {
     return (
-        <nav className="navbar navbar-expand-lg navbar-dark ">
+        <nav className="navbar navbar-expand-lg navbar-dark custom-nav ">
             <h1>Ecommerce</h1>
             <div className="collapse navbar-collapse custom-navbar" id="navbarNav">
                 <ul className="navbar-nav ">

@@ -36,8 +36,10 @@ function App() {
             } catch (error) {
                 console.error("Error fetching categories", error);
                 setCategoriesError(true);
-                setCategoriesLoading(false);
+            
                 setAlert('An error occurred while fetching categories. Please try again later.');
+            } finally{
+                setCategoriesLoading(false);
             }
         };
 
@@ -46,7 +48,6 @@ function App() {
 
     useEffect(() => {
         const fetchProducts = async () => {
-            setProductsLoading(true);
             let apiUrl = 'https://fakestoreapi.com/products';
             if (selectedCategory) {
                 apiUrl = `https://fakestoreapi.com/products/category/${selectedCategory}`;
@@ -71,6 +72,7 @@ function App() {
     }, [selectedCategory]);
 
     const [products, setProducts] = useState([]);
+    console.log(products.a)
 
     return (
         <Router>
@@ -93,10 +95,11 @@ function App() {
                                             category={product.category}
                                             imgUrl={product.image}
                                             price={product.price}
+                                            isAvailable ={product.isAvailable}
                                         />
                                     ))}
                                 </ul>} />
-                            <Route path="/product/:id" element={<ProductDetail />} />
+                            <Route path="/product/:id" element={<ProductDetail />} selectedCategory={selectedCategory} Categories={categories} />
                         </Routes>
                     </div>
                 )}
