@@ -13,7 +13,7 @@ function Products(props) {
                     <ProductsCard price={props.price} isAvailable={props.isAvailable} id={props.id} />
                 </div>
                 <div>
-                    <Link to={`/product/${props.id}`}>More Deatils</Link>
+                    <Link to={`/product/${props.id}`}>More Details</Link>
                 </div>
             </div>    
         </div>
