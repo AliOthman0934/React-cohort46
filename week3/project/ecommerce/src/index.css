@@ -63,3 +63,10 @@ padding: auto;
     align-items: center;
     gap: 10px;
 }
+
+.icon-custom-pro{
+    width: 20px;
+    height: 20px;
+    position: relative;
+    left: 97%;
+}
