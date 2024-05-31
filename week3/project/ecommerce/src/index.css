@@ -6,70 +6,47 @@ body {
     padding-top: 20px;
 }
 
-textarea {
-    color: #aaa;
-
-}
-
 .ml-custom {
     margin-left: 100px;
 }
 
-.custom-card {
-    width: 300px;
-    height: 300px;
-    margin-left: 10px;
-    padding: 10px;
-    margin-top: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.custom-card{
+width: 340px;
+height: 340px;
+margin-left: 10px;
+padding: 10px;
+margin-top: 10px;
+display: flex;
+justify-content: center;
+align-items: center;
 }
 
-.custom-ul {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    padding-top: 25px;
-    margin: auto;
-    padding: auto;
+.custom-ul{
+display: flex;
+flex-direction: row;
+flex-wrap: wrap;
+justify-content: center;
+align-items: center;
+padding-top: 25px;
+margin: auto;
+padding: auto;
 }
 
-.custom-navbar {
+.custom-navbar{
     margin-left: 200px;
     font-size: 18px;
     color: black;
 }
 
-.custom-button {
+.custom-button{
     margin-left: 10px;
     background-color: #96c93d;
     border-style: none;
     text-decoration: none;
 }
 
-
-.navbar-nav-custom {
-    list-style: none;
-    display: flex;
-    justify-content: space-between;
-}
-
-.nav-item-custom {
-    margin-right: 20px;
-}
-
-.nav-link-custom {
-    text-decoration: none;
-    color: #fff;
-    font-size: 18px;
-}
-
-.nav-link:hover {
-    color: #ffc107;
-    /* Change color on hover */
+.custom-button:focus{
+    background-color: #aaa;
 }
 
 .icon-custom{
@@ -77,4 +54,12 @@ textarea {
     height: 20px;
     position: relative;
     left: 120px;
+}
+
+.card-group-fav{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
 }

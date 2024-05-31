@@ -1,25 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import "./app.css";
+import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import Categories from './components/Categories';
 import Products from './components/Product';
 import ProductDetail from './components/ProductDetail';
 import { RingLoader } from 'react-spinners';
 import Alert from './components/Alert';
+import FavoritesPage from './components/FavoritesPage';
 import {FavoriteProvider} from './components/FavoriteContext';
-import FavoritePage from './components/FavoritePage';
-import Navbar from './components/Navbar';
 
 function App() {
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState(null);
-    const [loading, setLoading] = useState(true);
     const [alert, setAlert] = useState(null);
 
+    const [isCategoriesLoading, setCategoriesLoading] = useState(true);
+    const [isProductsLoading, setProductsLoading] = useState(false);
+
+    const [categoriesError, setCategoriesError] = useState(false);
+    const [productsError, setProductsError] = useState(false);
+
+    const navigate = useNavigate();
+
     const handleCategorySelect = (category) => {
-        setSelectedCategory(prevCategory=>
-            prevCategory === category ? null : category
-            );
+        if (selectedCategory === category) {
+            setSelectedCategory(null);
+            navigate('/');
+        } else {
+            setSelectedCategory(category);
+            navigate(`/category/${category}`);
+        }
     };
 
     useEffect(() => {
@@ -31,61 +40,60 @@ function App() {
                 }
                 const data = await response.json();
                 setCategories(data);
+                setCategoriesLoading(false);
             } catch (error) {
                 console.error("Error fetching categories", error);
+                setCategoriesError(true);
                 setAlert('An error occurred while fetching categories. Please try again later.');
+            } finally {
+                setCategoriesLoading(false);
             }
         };
 
         fetchCategories();
     }, []);
 
-    useEffect(() => {
-        const fetchProducts = async () => {
-            setLoading(true);
-            let apiUrl = 'https://fakestoreapi.com/products';
-            if (selectedCategory) {
-                apiUrl = `https://fakestoreapi.com/products/category/${selectedCategory}`;
+    const fetchProducts = async (category) => {
+        setProductsLoading(true);
+        let apiUrl = 'https://fakestoreapi.com/products';
+        if (category) {
+            apiUrl = `https://fakestoreapi.com/products/category/${category}`;
+        }
+        try {
+            const response = await fetch(apiUrl);
+            if (!response.ok) {
+                throw new Error("Response is not Ok");
             }
-            try {
-                const response = await fetch(apiUrl);
-                if (!response.ok) {
-                    throw new Error("Response is not Ok");
-                }
-                const data = await response.json();
-                setProducts(data);
-                setLoading(false);
-            } catch (error) {
-                console.error("Error fetching products", error);
-                setLoading(false);
-                setAlert('An error occurred while fetching products. Please try again later.');
-            }
-        };
+            const data = await response.json();
+            setProducts(data);
+        } catch (error) {
+            console.error("Error fetching products", error);
+            setProductsError(true);
+            setAlert('An error occurred while fetching products. Please try again later.');
+        } finally {
+            setProductsLoading(false);
+        }
+    };
 
-        fetchProducts();
+    useEffect(() => {
+        fetchProducts(selectedCategory);
     }, [selectedCategory]);
 
     const [products, setProducts] = useState([]);
-
-    if (loading) {
-        return (
-            <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
-                <RingLoader color="#7986cb" loading={loading} size={150} />
-            </div>
-        )
-    }
+    console.log(products);
 
     return (
         <FavoriteProvider>
-            <Router>
-                <div className='navbar'>
-                    <Navbar></Navbar>
-                </div>
-                <div className="col">
-                    <Categories categories={categories} onSelectCategory={handleCategorySelect} />
+            <div className="col">
+                <Categories categories={categories} onSelectCategory={handleCategorySelect} selectedCategory={selectedCategory} />
+                {isCategoriesLoading || isProductsLoading ? (
+                    <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '10vh' }}>
+                        <RingLoader color="#7986cb" loading={true} size={50} />
+                    </div>
+                ) : (
                     <div className="col-lg-10 mx-auto">
                         <Routes>
-                            <Route exact path="/" element={
+                            <Route path="/" element={
                                 <ul className="list-group shadow custom-ul">
                                     {products.map((product) => (
                                         <Products
@@ -95,22 +103,44 @@ function App() {
                                             category={product.category}
                                             imgUrl={product.image}
                                             price={product.price}
+                                            isAvailable={product.isAvailable}
                                         />
                                     ))}
-                                </ul>} />
-                            <Route path="/product/:id" element={<ProductDetail />} />
-                            <Route path="/favorites" element={<FavoritePage />} />
+                                </ul>
+                            } />
+                            <Route path="/category/:category" element={
+                                <ul className="list-group shadow custom-ul">
+                                    {products.map((product) => (
+                                        <Products
+                                            key={product.id}
+                                            id={product.id}
+                                            name={product.title}
+                                            category={product.category}
+                                            imgUrl={product.image}
+                                            price={product.price}
+                                            isAvailable={product.isAvailable}
+                                        />
+                                    ))}
+                                </ul>
+                            } />
+                            <Route path="/product/:id" element={<ProductDetail selectedCategory={selectedCategory} />} />
+                            <Route path="/favorites" element={<FavoritesPage/>} />
                         </Routes>
                     </div>
-                    {alert && <Alert message={alert}></Alert>}
-                </div>
-            </Router>
-        </FavoriteProvider>
+                )}
+                {alert && <Alert message={alert}></Alert>}
+            </div>
+        </FavoriteProvider>    
     );
 }
 
-export default App;
-
+export default function AppWrapper() {
+    return (
+        <Router>
+            <App />
+        </Router>
+    );
+}
 
 
 
